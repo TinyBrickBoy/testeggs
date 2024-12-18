@@ -1,0 +1,49 @@
+{
+  "name": "Traefik",
+  "description": "Traefik reverse proxy for containerized services.",
+  "docker_image": "traefik:v2.10",
+  "startup": "traefik --configFile=/home/container/traefik.yml",
+  "environment": [
+    {
+      "name": "TRAEFIK_HTTP_PORT",
+      "description": "The HTTP port for Traefik",
+      "default": "80",
+      "required": true
+    },
+    {
+      "name": "TRAEFIK_HTTPS_PORT",
+      "description": "The HTTPS port for Traefik",
+      "default": "443",
+      "required": true
+    }
+  ],
+  "config": {
+    "files": {
+      "traefik.yml": {
+        "parser": "yaml",
+        "find": {},
+        "replace": {}
+      }
+    },
+    "startup": {
+      "done": ["Starting provider *file"]
+    },
+    "logs": {
+      "custom": false
+    },
+    "stop": "kill -9 $(pidof traefik)"
+  },
+  "mounts": [],
+  "container": {
+    "image": "traefik:v2.10",
+    "entrypoint": "sh"
+  },
+  "egg": {
+    "features": {
+      "install_script": false,
+      "network": true,
+      "nest_id": 1,
+      "id": 1
+    }
+  }
+}
